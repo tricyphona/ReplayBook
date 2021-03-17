@@ -3,6 +3,7 @@ using ModernWpf;
 using Rofl.Files;
 using Rofl.Requests;
 using Rofl.Settings;
+using Rofl.UI.Main.Controls;
 using Rofl.UI.Main.Utilities;
 using Rofl.UI.Main.Views;
 using System;
@@ -24,12 +25,18 @@ namespace Rofl.UI.Main
         private ReplayPlayer _player;
 
         private async void Application_Startup(object sender, StartupEventArgs e)
-        {
-            CreateCommonObjects();
-
+        {   
+            // We must load settings before anything else
+            var assemblyName = Assembly.GetEntryAssembly()?.GetName();
+            _log = new RiZhi()
+            {
+                FilePrefix = "ReplayBookLog",
+                AssemblyName = assemblyName.Name,
+                AssemblyVersion = assemblyName.Version.ToString(2)
+            };
+            _settingsManager = new SettingsManager(_log);
             // Apply appearence theme
             ApplyThemeSetting();
-
             // Apply language setting
             LanguageHelper.SetProgramLanguage(_settingsManager.Settings.ProgramLanguage);
 
@@ -45,14 +52,13 @@ namespace Rofl.UI.Main
                 }
                 else if (_settingsManager.Settings.FileAction == Settings.Models.FileAction.Open)
                 {
-                    StartSingleReplayWindow(selectedFile);
+                    StartMainWindow(true);
                 }
                 else { }
-
             }
             else
             {
-                StartMainWindow();
+                StartMainWindow(false);
             }
         }
 
@@ -63,10 +69,18 @@ namespace Rofl.UI.Main
             host.Show();
         }
 
-        private void StartMainWindow()
+        private void StartMainWindow(bool smallMode)
         {
-            var mainWindow = new MainWindow(_log, _settingsManager, _requests, _files, _player);
+            // Show the splash window
+            var mainWindow = new MainWindowContainer(smallMode);
             mainWindow.Show();
+
+            // Create the rest of the requied objects
+            CreateCommonObjects();
+
+            var content = new MainWindow(_log, _settingsManager, _requests, _files, _player);
+
+            mainWindow.Content = content;
         }
 
         private void StartSingleReplayWindow(string path)
@@ -81,18 +95,8 @@ namespace Rofl.UI.Main
         private void CreateCommonObjects()
         {
             // Create common objects
-            var assemblyName = Assembly.GetEntryAssembly()?.GetName();
-
-            _log = new RiZhi()
-            {
-                FilePrefix = "ReplayBookLog",
-                AssemblyName = assemblyName.Name,
-                AssemblyVersion = assemblyName.Version.ToString(2)
-            };
-
             try
             {
-                _settingsManager = new SettingsManager(_log);
                 _files = new FileManager(_settingsManager.Settings, _log);
                 _requests = new RequestManager(_settingsManager.Settings, _log);
                 _player = new ReplayPlayer(_files, _settingsManager, _log);

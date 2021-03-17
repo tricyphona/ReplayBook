@@ -8,10 +8,8 @@
         xmlns:ui="http://schemas.modernwpf.com/2019"
         mc:Ignorable="d"
         Title="{DynamicResource ProgramName}"
-        MinHeight="670"
-        Height="670" 
-        MinWidth="780"
-        Width="780"
+        MinHeight="670" Height="670" 
+        MinWidth="780" Width="780"
         Loaded="Window_Loaded"
         ui:WindowHelper.UseModernWindowStyle="True">
     <Grid>

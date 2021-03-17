@@ -1,6 +1,7 @@
 ﻿using Rofl.UI.Main.Models;
 using Rofl.UI.Main.Utilities;
 using Rofl.UI.Main.ViewModels;
+using Rofl.UI.Main.Views;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -31,15 +32,14 @@ namespace Rofl.UI.Main.Controls
             await context.PlayReplay(replay).ConfigureAwait(true);
         }
 
-
         private void MoreButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!(Window.GetWindow(this) is MainWindow mainWindow)) { return; }
+            if (!(Window.GetWindow(this) is MainWindowContainer container)) { return; }
             if (!(this.DataContext is ReplayPreview replay)) { return; }
             if (!(sender is Button moreButton)) { return; }
 
-            // Select the item
-            mainWindow.SelectReplayItem(replay);
+            // Select the item TODO
+            // mainWindow.SelectReplayItem(replay);
 
             // Get the button and menu
             ContextMenu contextMenu = moreButton.ContextMenu;

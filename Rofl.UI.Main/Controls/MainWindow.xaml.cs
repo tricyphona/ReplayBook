@@ -18,12 +18,12 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Threading;
 
-namespace Rofl.UI.Main
+namespace Rofl.UI.Main.Controls
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : UserControl
     {
         private readonly FileManager _files;
         private readonly RequestManager _requests;
@@ -59,27 +59,27 @@ namespace Rofl.UI.Main
             context.ShowMissingReplayFoldersMessageBox();
         }
 
-        // Window is loaded and ready to be shown on screen
-        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            var values = _settingsManager.TemporaryValues;
+        //// Window is loaded and ready to be shown on screen
+        //private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        //{
+        //    var values = _settingsManager.TemporaryValues;
 
-            if (values.TryGetDouble("WindowHeight", out double savedHeight) &&
-                values.TryGetDouble("WindowWidth", out double savedWidth) &&
-                values.TryGetDouble("WindowLeft", out double savedLeft) &&
-                values.TryGetDouble("WindowTop", out double savedTop) &&
-                values.TryGetBool("WindowMaximized", out bool savedMaximized))
-            {
-                this.Height = savedHeight;
-                this.Width = savedWidth;
-                this.Left = savedLeft;
-                this.Top = savedTop;
-                if (savedMaximized)
-                {
-                    this.WindowState = WindowState.Maximized;
-                }
-            }
-        }
+        //    if (values.TryGetDouble("WindowHeight", out double savedHeight) &&
+        //        values.TryGetDouble("WindowWidth", out double savedWidth) &&
+        //        values.TryGetDouble("WindowLeft", out double savedLeft) &&
+        //        values.TryGetDouble("WindowTop", out double savedTop) &&
+        //        values.TryGetBool("WindowMaximized", out bool savedMaximized))
+        //    {
+        //        this.Height = savedHeight;
+        //        this.Width = savedWidth;
+        //        this.Left = savedLeft;
+        //        this.Top = savedTop;
+        //        if (savedMaximized)
+        //        {
+        //            this.WindowState = WindowState.Maximized;
+        //        }
+        //    }
+        //}
 
         // Window has been rendered to the screen
         private async void Window_ContentRendered(object sender, EventArgs e)
@@ -286,20 +286,20 @@ namespace Rofl.UI.Main
             await context.LoadPreviewPlayerThumbnails().ConfigureAwait(true);
         }
 
-        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
-        {
-            if (!(this.DataContext is MainWindowViewModel context)) { return; }
+        //private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        //{
+        //    if (!(this.DataContext is MainWindowViewModel context)) { return; }
 
-            context.ClearDeletedReplays();
+        //    context.ClearDeletedReplays();
 
-            _settingsManager.TemporaryValues["WindowHeight"] = this.Height;
-            _settingsManager.TemporaryValues["WindowWidth"] = this.Width;
-            _settingsManager.TemporaryValues["WindowLeft"] = this.Left;
-            _settingsManager.TemporaryValues["WindowTop"] = this.Top;
-            _settingsManager.TemporaryValues["WindowMaximized"] = (this.WindowState == WindowState.Maximized);
+        //    _settingsManager.TemporaryValues["WindowHeight"] = this.Height;
+        //    _settingsManager.TemporaryValues["WindowWidth"] = this.Width;
+        //    _settingsManager.TemporaryValues["WindowLeft"] = this.Left;
+        //    _settingsManager.TemporaryValues["WindowTop"] = this.Top;
+        //    _settingsManager.TemporaryValues["WindowMaximized"] = (this.WindowState == WindowState.Maximized);
 
-            _settingsManager.SaveTemporaryValues();
-        }
+        //    _settingsManager.SaveTemporaryValues();
+        //}
         
         private async void Window_Closed(object sender, EventArgs e)
         {
